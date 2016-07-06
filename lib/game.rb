@@ -35,17 +35,17 @@ private
     return unless @status == 0
     return if (@good_letters + @bad_letters).include? letter
 
-    if guessed? letter
-      add_to_good(letter)
+    if guess(letter)
+      add_to(@good_letters, letter)
       @status = 1 if (@letters - @good_letters).empty?
     else
-      @bad_letters << letter
+      add_to(@bad_letters, letter)
       @errors_count += 1
       @status = -1 if @errors_count >= 7
     end
   end
 
-  def guessed?(letter)
+  def guess(letter)
     @letters.include?(letter) ||
     (letter == 'е' && @letters.include?('ё')) ||
     (letter == 'ё' && @letters.include?('е')) ||
@@ -53,11 +53,11 @@ private
     (letter == 'й' && @letters.include?('и'))
   end
 
-  def add_to_good(letter)
-    @good_letters << letter
-    @good_letters << 'е' if letter == 'ё'
-    @good_letters << 'ё' if letter == 'е'
-    @good_letters << 'и' if letter == 'й'
-    @good_letters << 'й' if letter == 'и'
+  def add_to(letters, letter)
+    letters << letter
+    letters << 'е' if letter == 'ё'
+    letters << 'ё' if letter == 'е'
+    letters << 'и' if letter == 'й'
+    letters << 'й' if letter == 'и'
   end
 end
